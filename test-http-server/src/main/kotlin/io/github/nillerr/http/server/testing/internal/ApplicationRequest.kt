@@ -17,7 +17,7 @@ internal suspend fun ApplicationRequest.toRecordedRequest(): RecordedRequest {
     )
 }
 
-fun io.ktor.util.StringValues.toStringValues(): StringValues {
+internal fun io.ktor.util.StringValues.toStringValues(): StringValues {
     val values = MutableStringValues()
     flattenForEach { name, value ->
         values.add(name, value)
