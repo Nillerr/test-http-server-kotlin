@@ -72,7 +72,7 @@ fun MutablePreparedResponse.json(
     explicit: Boolean = true,
     charset: Charset? = null,
 ): MutablePreparedResponse {
-    if (explicit && headers.contains("Content-Type")) {
+    if (explicit && !headers.contains("Content-Type")) {
         if (charset != null) {
             header("Content-Type", "application/json; charset=${charset.name().lowercase()}")
         } else {
