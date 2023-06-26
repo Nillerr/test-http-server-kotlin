@@ -1,8 +1,6 @@
 dependencies {
     // AutoCleanup
-    testImplementation("io.github.nillerr:autocleanup-junit5:1.0.0-SNAPSHOT") {
-        isChanging = true
-    }
+    testImplementation("io.github.nillerr:autocleanup-junit5:1.0.0")
 
     // Ktor Client
     testImplementation("io.ktor:ktor-client-core:2.3.1")
