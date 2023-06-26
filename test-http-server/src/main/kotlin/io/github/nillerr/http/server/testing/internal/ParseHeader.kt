@@ -1,5 +1,6 @@
 package io.github.nillerr.http.server.testing.internal
 
+import io.github.nillerr.http.server.testing.StringValues
 import java.nio.charset.Charset
 
 fun parseHeader(value: String): List<Pair<String, String>> {
@@ -14,12 +15,8 @@ fun parseHeaderPart(value: String): Pair<String, String> {
     return "" to parts[0]
 }
 
-fun getLastHeaderOrNull(headers: List<Pair<String, String>>, name: String): String? {
-    return headers.filter { (n, _) -> n == name }.map { (_, v) -> v }.lastOrNull()
-}
-
-fun getContentTypeOrNull(headers: List<Pair<String, String>>): String? {
-    return getLastHeaderOrNull(headers, "Content-Type")
+fun getContentTypeOrNull(headers: StringValues): String? {
+    return headers.get("Content-Type").singleOrNull()
 }
 
 fun getCharsetOrNull(value: String): Charset? {
@@ -27,11 +24,11 @@ fun getCharsetOrNull(value: String): Charset? {
         ?.let { Charset.forName(it) }
 }
 
-fun getCharsetOrNull(headers: List<Pair<String, String>>): Charset? {
+fun getCharsetOrNull(headers: StringValues): Charset? {
     return getContentTypeOrNull(headers)?.let { getCharsetOrNull(it) }
 }
 
-fun getCharset(headers: List<Pair<String, String>>): Charset {
+fun getCharset(headers: StringValues): Charset {
     return getCharsetOrNull(headers) ?: Charsets.UTF_8
 }
 
@@ -39,6 +36,6 @@ fun getFirstHeaderPartOrNull(value: String, name: String): String? {
     return parseHeader(value).filter { (n, _) -> n == name }.map { (_, v) -> v }.firstOrNull()
 }
 
-fun getMediaTypeOrNull(headers: List<Pair<String, String>>): String? {
+fun getMediaTypeOrNull(headers: StringValues): String? {
     return getContentTypeOrNull(headers)?.let { getFirstHeaderPartOrNull(it, "") }
 }

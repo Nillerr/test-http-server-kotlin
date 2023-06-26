@@ -11,7 +11,7 @@ class AnyRequestBodyExpectationTests {
         val expectation = AnyRequestBodyExpectation
 
         // When
-        val result = expectation.matches(emptyList(), ByteArray(325))
+        val result = expectation.matches(emptyStringValues(), ByteArray(325))
 
         // Then
         assertTrue(result)
@@ -23,7 +23,7 @@ class AnyRequestBodyExpectationTests {
         val expectation = AnyRequestBodyExpectation
 
         // When
-        val result = expectation.matches(listOf("Content-Type" to "text/plain"), "Hello, World!".toByteArray())
+        val result = expectation.matches(stringValuesOf("Content-Type" to "text/plain"), "Hello, World!".toByteArray())
 
         // Then
         assertTrue(result)

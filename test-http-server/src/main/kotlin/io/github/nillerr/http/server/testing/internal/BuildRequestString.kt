@@ -1,33 +1,42 @@
 package io.github.nillerr.http.server.testing.internal
 
-import io.ktor.http.*
+import io.github.nillerr.http.server.testing.StringValues
+import io.ktor.http.encodeURLParameter
+import io.ktor.http.encodeURLPath
 
 internal fun buildRequestString(
     method: String,
     path: String,
-    parameters: List<Pair<String, String>>,
-    headers: List<Pair<String, String>>,
+    parameters: StringValues,
+    headers: StringValues,
     body: String,
 ): String {
     return buildString {
         val encodedPath = buildString {
             append(path.encodeURLPath())
 
-            if (parameters.isNotEmpty()) {
-                append('=')
+            if (parameters.entries.isNotEmpty()) {
+                append('?')
 
-                for ((name, value) in parameters) {
-                    append(name.encodeURLParameter())
-                    append('=')
-                    append(value.encodeURLParameter(spaceToPlus = true))
-                }
+                val queryString = buildString {
+                    for ((name, values) in parameters.entries) {
+                        for (value in values) {
+                            append(name.encodeURLParameter())
+                            append('=')
+                            append(value.encodeURLParameter(spaceToPlus = true))
+                            append('&')
+                        }
+                    }
+                }.dropLast(1)
+
+                append(queryString)
             }
         }
 
         appendLine("$method $encodedPath HTTP/1.1")
 
-        for ((name, value) in headers) {
-            appendLine("$name: $value")
+        for ((name, values) in headers.entries) {
+            appendLine("$name: ${values.joinToString(",")}")
         }
 
         appendLine()

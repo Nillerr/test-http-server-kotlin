@@ -6,8 +6,8 @@ import io.github.nillerr.http.server.testing.internal.getCharset
 class RecordedRequest(
     val method: String,
     val path: String,
-    val parameters: List<Pair<String, String>>,
-    val headers: List<Pair<String, String>>,
+    val parameters: StringValues,
+    val headers: StringValues,
     val body: ByteArray,
 ) {
     override fun toString(): String {

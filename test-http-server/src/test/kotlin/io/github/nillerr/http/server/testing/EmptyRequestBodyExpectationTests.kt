@@ -11,7 +11,7 @@ class EmptyRequestBodyExpectationTests {
         val expectation = EmptyRequestBodyExpectation
 
         // When
-        val result = expectation.matches(emptyList(), ByteArray(0))
+        val result = expectation.matches(emptyStringValues(), ByteArray(0))
 
         // Then
         assertTrue(result)

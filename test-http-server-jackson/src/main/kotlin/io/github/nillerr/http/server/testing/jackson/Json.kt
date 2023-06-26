@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import io.github.nillerr.http.server.testing.MutablePreparedResponse
 import io.github.nillerr.http.server.testing.MutableRequestExpectation
 import io.github.nillerr.http.server.testing.RequestBodyExpectation
+import io.github.nillerr.http.server.testing.StringValues
 import io.github.nillerr.http.server.testing.internal.getCharsetOrNull
 import io.github.nillerr.http.server.testing.internal.getMediaTypeOrNull
 import org.intellij.lang.annotations.Language
@@ -16,7 +17,7 @@ class JsonRequestBodyExpectation(
 ) : RequestBodyExpectation {
     private val expectedTree = json.readTree(expected)
 
-    override fun matches(headers: List<Pair<String, String>>, body: ByteArray): Boolean {
+    override fun matches(headers: StringValues, body: ByteArray): Boolean {
         val charset = getCharsetOrNull(headers)
 
         if (explicit) {
@@ -71,7 +72,7 @@ fun MutablePreparedResponse.json(
     explicit: Boolean = true,
     charset: Charset? = null,
 ): MutablePreparedResponse {
-    if (explicit && headers.none { (name, _) -> name == "Content-Type" }) {
+    if (explicit && headers.contains("Content-Type")) {
         if (charset != null) {
             header("Content-Type", "application/json; charset=${charset.name().lowercase()}")
         } else {

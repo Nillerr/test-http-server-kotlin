@@ -44,6 +44,10 @@ class TestHttpServer(
         server = null
     }
 
+    fun reset() {
+        expectations.clear()
+    }
+
     private fun startInternal(): ApplicationEngine {
         val host = "localhost"
         val port = ServerSocket(0).use { it.localPort }
@@ -81,8 +85,10 @@ class TestHttpServer(
         val response = expectation.response()
         call.response.status(HttpStatusCode.fromValue(response.status))
 
-        response.headers.forEach { (name, value) ->
-            call.response.header(name, value)
+        response.headers.entries.forEach { (name, values) ->
+            values.forEach { value ->
+                call.response.header(name, value)
+            }
         }
 
         call.respond(response.body)
@@ -100,9 +106,9 @@ class TestHttpServer(
         expectations.add(expectation)
     }
 
-    fun expect(method: String, path: String, builder: MutableRequestExpectation.() -> Unit = {}): MutableRequestExpectation {
+    fun expect(method: String, path: String, builder: MutableRequestExpectation.(MutableRequestExpectation) -> Unit = {}): MutableRequestExpectation {
         val expectation = MutableRequestExpectation(method, path)
-        builder(expectation)
+        builder(expectation, expectation)
         expect(expectation)
         return expectation
     }

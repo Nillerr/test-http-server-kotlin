@@ -13,7 +13,7 @@ class ByteArrayRequestBodyExpectationTests {
         val expectation = ByteArrayRequestBodyExpectation(content)
 
         // When
-        val result = expectation.matches(emptyList(), content)
+        val result = expectation.matches(emptyStringValues(), content)
 
         // Then
         assertTrue(result)
@@ -26,7 +26,7 @@ class ByteArrayRequestBodyExpectationTests {
         val expectation = ByteArrayRequestBodyExpectation(content)
 
         // When
-        val result = expectation.matches(emptyList(), byteArrayOf(50, 60, 80, 123, 127))
+        val result = expectation.matches(emptyStringValues(), byteArrayOf(50, 60, 80, 123, 127))
 
         // Then
         assertFalse(result)

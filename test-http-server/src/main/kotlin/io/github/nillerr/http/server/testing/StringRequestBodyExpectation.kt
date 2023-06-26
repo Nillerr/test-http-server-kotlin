@@ -3,7 +3,7 @@ package io.github.nillerr.http.server.testing
 import io.github.nillerr.http.server.testing.internal.getCharset
 
 class StringRequestBodyExpectation(private val expectation: String) : RequestBodyExpectation {
-    override fun matches(headers: List<Pair<String, String>>, body: ByteArray): Boolean {
+    override fun matches(headers: StringValues, body: ByteArray): Boolean {
         val charset = getCharset(headers)
         return expectation == body.toString(charset)
     }

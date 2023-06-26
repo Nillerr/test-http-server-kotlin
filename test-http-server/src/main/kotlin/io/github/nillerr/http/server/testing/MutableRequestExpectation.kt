@@ -6,8 +6,8 @@ class MutableRequestExpectation(
     override val method: String,
     override val path: String,
 ) : RequestExpectation {
-    override val parameters = mutableListOf<Pair<String, String>>()
-    override val headers = mutableListOf<Pair<String, String>>()
+    override val parameters = MutableStringValues()
+    override val headers = MutableStringValues()
 
     override var body: RequestBodyExpectation = AnyRequestBodyExpectation
         private set
@@ -16,12 +16,12 @@ class MutableRequestExpectation(
         private set
 
     fun parameter(name: String, value: Any): MutableRequestExpectation {
-        parameters.add(name to value.toString())
+        parameters.add(name, value)
         return this
     }
 
     fun header(name: String, value: Any): MutableRequestExpectation {
-        headers.add(name to value.toString())
+        headers.add(name, value)
         return this
     }
 
@@ -30,11 +30,11 @@ class MutableRequestExpectation(
         return this
     }
 
-    fun respond(status: Int, block: suspend MutablePreparedResponse.() -> Unit = {}) {
+    fun respond(status: Int, block: suspend MutablePreparedResponse.(MutablePreparedResponse) -> Unit = {}) {
         this.response = {
             val response = MutablePreparedResponse()
             response.status = status
-            block(response)
+            block(response, response)
             response
         }
     }

@@ -4,8 +4,8 @@ interface RequestExpectation {
     val method: String
     val path: String
 
-    val parameters: List<Pair<String, String>>
-    val headers: List<Pair<String, String>>
+    val parameters: StringValues
+    val headers: StringValues
 
     val body: RequestBodyExpectation
 
@@ -25,7 +25,7 @@ fun RequestExpectation.matches(request: RecordedRequest): Boolean {
         return false
     }
 
-    if (!headers.all { request.headers.contains(it) }) {
+    if (!headers.containsAll(request.headers)) {
         return false
     }
 

@@ -5,7 +5,7 @@ import io.ktor.http.*
 
 class MutablePreparedResponse : PreparedResponse {
     override var status: Int = 501
-    override val headers = mutableListOf<Pair<String, String>>()
+    override val headers = MutableStringValues()
     override var body: ByteArray = ByteArray(0)
 
     fun status(status: Int): MutablePreparedResponse {
@@ -14,7 +14,7 @@ class MutablePreparedResponse : PreparedResponse {
     }
 
     fun header(name: String, value: Any): MutablePreparedResponse {
-        headers.add(name to value.toString())
+        headers.add(name, value)
         return this
     }
 
@@ -29,8 +29,8 @@ class MutablePreparedResponse : PreparedResponse {
             val description = httpStatus.description
             appendLine("HTTP/1.1 $status $description")
 
-            for ((name, value) in headers) {
-                appendLine("$name: $value")
+            for ((name, values) in headers.entries) {
+                appendLine("$name: ${values.joinToString(",")}")
             }
 
             appendLine()

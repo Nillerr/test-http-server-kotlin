@@ -1,5 +1,6 @@
 package io.github.nillerr.http.server.testing.jackson
 
+import io.github.nillerr.http.server.testing.stringValuesOf
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -13,7 +14,7 @@ class JsonRequestBodyExpectationTests {
         val charset = Charsets.ISO_8859_1
         val expectation = JsonRequestBodyExpectation(expectedRequestBody, true, charset)
 
-        val headers = listOf("Content-Type" to "application/json; charset=iso-8859-1")
+        val headers = stringValuesOf("Content-Type" to "application/json; charset=iso-8859-1")
 
         // When
         val result = expectation.matches(headers, expectedRequestBody.toByteArray(charset))
@@ -29,7 +30,7 @@ class JsonRequestBodyExpectationTests {
         val charset = Charsets.ISO_8859_1
         val expectation = JsonRequestBodyExpectation(expectedRequestBody, true, charset)
 
-        val headers = listOf("Content-Type" to "application/json; charset=utf-8")
+        val headers = stringValuesOf("Content-Type" to "application/json; charset=utf-8")
 
         // When
         val result = expectation.matches(headers, expectedRequestBody.toByteArray(charset))
@@ -45,7 +46,7 @@ class JsonRequestBodyExpectationTests {
         val charset = Charsets.ISO_8859_1
         val expectation = JsonRequestBodyExpectation(expectedRequestBody, true, charset)
 
-        val headers = listOf("Content-Type" to "application/xml; charset=iso-8859-1")
+        val headers = stringValuesOf("Content-Type" to "application/xml; charset=iso-8859-1")
 
         // When
         val result = expectation.matches(headers, expectedRequestBody.toByteArray(charset))
@@ -61,7 +62,7 @@ class JsonRequestBodyExpectationTests {
         val charset = Charsets.ISO_8859_1
         val expectation = JsonRequestBodyExpectation(expectedRequestBody, true, charset)
 
-        val headers = listOf("Content-Type" to "application/xml; charset=utf-8")
+        val headers = stringValuesOf("Content-Type" to "application/xml; charset=utf-8")
 
         // When
         val result = expectation.matches(headers, expectedRequestBody.toByteArray(charset))

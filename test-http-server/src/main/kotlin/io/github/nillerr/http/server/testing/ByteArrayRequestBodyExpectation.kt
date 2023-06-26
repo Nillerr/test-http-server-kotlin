@@ -1,7 +1,7 @@
 package io.github.nillerr.http.server.testing
 
 class ByteArrayRequestBodyExpectation(private val expectation: ByteArray) : RequestBodyExpectation {
-    override fun matches(headers: List<Pair<String, String>>, body: ByteArray): Boolean {
+    override fun matches(headers: StringValues, body: ByteArray): Boolean {
         return expectation.contentEquals(body)
     }
 
