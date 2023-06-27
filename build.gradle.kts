@@ -94,19 +94,19 @@ subprojects {
             create<MavenPublication>("maven") {
                 from(components["java"])
 
-                artifact(sourcesJar.get())
+                artifact(sourcesJar)
                 artifact(dokkaJavadocJar)
                 artifact(dokkaHtmlJar)
 
                 pom {
-                    name.set("OOXML for Kotlin")
-                    description.set("Provides means of generating OOXML documents using Kotlin data classes.")
-                    url.set("https://github.com/Nillerr/ooxml-kotlin")
+                    name.set("Test HTTP Server")
+                    description.set("Provides an HTTP server for testing HTTP client implementations.")
+                    url.set("https://github.com/Nillerr/test-http-server-kotlin")
 
                     licenses {
                         license {
                             name.set("MIT")
-                            url.set("https://github.com/Nillerr/ooxml-kotlin/LICENSE")
+                            url.set("https://github.com/Nillerr/test-http-server-kotlin/LICENSE")
                         }
                     }
 
@@ -119,7 +119,7 @@ subprojects {
                     }
 
                     scm {
-                        url.set("https://github.com/Nillerr/ooxml-kotlin")
+                        url.set("https://github.com/Nillerr/test-http-server-kotlin")
                     }
                 }
             }
