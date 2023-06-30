@@ -99,7 +99,9 @@ class AutoCleanupTestHttpServerTests {
         // Given
         server.expect("POST", "/users") {
             parameter("id", 5)
+            parameter("foo", null)
             header("Authorization", "Bearer [jwt]")
+            header("Accept", null)
             body("Nicklas")
         }.respond(200) {
             header("Content-Type", "text/html")

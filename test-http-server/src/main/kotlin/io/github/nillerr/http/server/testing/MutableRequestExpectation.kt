@@ -15,13 +15,17 @@ class MutableRequestExpectation(
     override var response: suspend () -> PreparedResponse = { MutablePreparedResponse() }
         private set
 
-    fun parameter(name: String, value: Any): MutableRequestExpectation {
-        parameters.add(name, value)
+    fun parameter(name: String, value: Any?): MutableRequestExpectation {
+        if (value != null) {
+            parameters.add(name, value)
+        }
         return this
     }
 
-    fun header(name: String, value: Any): MutableRequestExpectation {
-        headers.add(name, value)
+    fun header(name: String, value: Any?): MutableRequestExpectation {
+        if (value != null) {
+            headers.add(name, value)
+        }
         return this
     }
 
