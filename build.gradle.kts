@@ -7,7 +7,7 @@ plugins {
 
     kotlin("jvm")
 
-    id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka") version "2.1.0"
 }
 
 allprojects {
@@ -34,13 +34,20 @@ subprojects {
         testImplementation(kotlin("test"))
     }
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     tasks {
         test {
             useJUnitPlatform()
         }
 
         withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "1.8"
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            }
         }
     }
 
