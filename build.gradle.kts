@@ -9,6 +9,7 @@ plugins {
     kotlin("jvm")
 
     id("org.jetbrains.dokka") version "2.1.0"
+    id("org.jetbrains.dokka-javadoc") version "2.1.0"
 }
 
 allprojects {
@@ -28,6 +29,7 @@ allprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "kotlin")
     apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "org.jetbrains.dokka-javadoc")
 }
 
 subprojects {
@@ -53,15 +55,15 @@ subprojects {
     }
 
     val dokkaHtmlJar by tasks.registering(Jar::class) {
-        dependsOn(tasks.dokkaHtml)
-        from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+        dependsOn(tasks.dokkaGeneratePublicationHtml)
+        from(tasks.dokkaGeneratePublicationHtml.flatMap { it.outputDirectory })
         archiveClassifier.set("html-docs")
     }
 
     val dokkaJavadocJar by tasks.registering(Jar::class) {
-        dependsOn(tasks.dokkaJavadoc)
+        dependsOn(tasks.dokkaGeneratePublicationJavadoc)
         archiveClassifier.set("javadoc")
-        from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+        from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
     }
 
     val sourcesJar by tasks.registering(Jar::class) {
