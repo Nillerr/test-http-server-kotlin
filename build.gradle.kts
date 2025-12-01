@@ -1,15 +1,16 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java-library")
-    id("signing")
-    id("maven-publish")
-
     kotlin("jvm")
 
     id("org.jetbrains.dokka") version "2.1.0"
     id("org.jetbrains.dokka-javadoc") version "2.1.0"
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 allprojects {
@@ -25,11 +26,10 @@ allprojects {
     }
 
     apply(plugin = "java-library")
-    apply(plugin = "signing")
-    apply(plugin = "maven-publish")
     apply(plugin = "kotlin")
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jetbrains.dokka-javadoc")
+    apply(plugin = "com.vanniktech.maven.publish")
 }
 
 subprojects {
@@ -60,89 +60,54 @@ subprojects {
         archiveClassifier.set("html-docs")
     }
 
-    val dokkaJavadocJar by tasks.registering(Jar::class) {
-        dependsOn(tasks.dokkaGeneratePublicationJavadoc)
-        archiveClassifier.set("javadoc")
-        from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-    }
+    mavenPublishing {
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        signAllPublications()
 
-    val sourcesJar by tasks.registering(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
+        pom {
+            name.set("Test HTTP Server")
+            description.set("Provides an HTTP server for testing HTTP client implementations.")
+            url.set("https://github.com/Nillerr/test-http-server-kotlin")
+            inceptionYear.set("2024")
 
-    publishing {
-        repositories {
-            maven {
-                name = "Sonatype"
-
-                val repository = findProperty("sonatype.repository")
-                if (repository == null) {
-                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
-                } else {
-                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deployByRepositoryId/$repository")
-                }
-
-                credentials {
-                    username = property("sonatype.username") as String
-                    password = property("sonatype.password") as String
+            licenses {
+                license {
+                    name.set("MIT")
+                    url.set("https://github.com/Nillerr/test-http-server-kotlin/blob/main/LICENSE")
                 }
             }
 
-            maven {
-                name = "SonatypeSnapshot"
-                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
-
-                credentials {
-                    username = property("sonatype.username") as String
-                    password = property("sonatype.password") as String
+            developers {
+                developer {
+                    id.set("Nillerr")
+                    name.set("Nicklas Jensen")
+                    url.set("https://github.com/Nillerr")
                 }
+            }
+
+            scm {
+                url.set("https://github.com/Nillerr/test-http-server-kotlin")
+                connection.set("scm:git:git://github.com/Nillerr/test-http-server-kotlin.git")
+                developerConnection.set("scm:git:ssh://git@github.com/Nillerr/test-http-server-kotlin.git")
             }
         }
 
-        publications {
-            create<MavenPublication>("maven") {
-                from(components["java"])
+        // Configure Dokka for javadoc
+        configure(
+            KotlinJvm(
+                javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationJavadoc")
+            )
+        )
+    }
 
-                artifact(sourcesJar)
-                artifact(dokkaJavadocJar)
-                artifact(dokkaHtmlJar)
-
-                pom {
-                    name.set("Test HTTP Server")
-                    description.set("Provides an HTTP server for testing HTTP client implementations.")
-                    url.set("https://github.com/Nillerr/test-http-server-kotlin")
-
-                    licenses {
-                        license {
-                            name.set("MIT")
-                            url.set("https://github.com/Nillerr/test-http-server-kotlin/LICENSE")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("Nillerr")
-                            name.set("Nicklas Jensen")
-                            url.set("https://github.com/Nillerr")
-                        }
-                    }
-
-                    scm {
-                        url.set("https://github.com/Nillerr/test-http-server-kotlin")
-                    }
+    // Add the HTML docs jar as an additional artifact
+    afterEvaluate {
+        publishing {
+            publications {
+                named<MavenPublication>("maven") {
+                    artifact(dokkaHtmlJar)
                 }
             }
         }
-    }
-
-    signing {
-        val keyId = property("io.github.nillerr.signing.key_id") as String
-        val secretKey = property("io.github.nillerr.signing.secret_key") as String
-        val password = property("io.github.nillerr.signing.password") as String
-
-        useInMemoryPgpKeys(keyId, secretKey, password)
-
-        sign(publishing.publications)
     }
 }
