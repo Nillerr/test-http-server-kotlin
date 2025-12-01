@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0a2dbdef-e839-4573-b87d-00da045947c5/console.sql" value="0a2dbdef-e839-4573-b87d-00da045947c5" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0a2dbdef-e839-4573-b87d-00da045947c5/console_1.sql" value="0a2dbdef-e839-4573-b87d-00da045947c5" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/326e2324-5a8f-4f3c-b371-84de38015e1d/console.sql" value="326e2324-5a8f-4f3c-b371-84de38015e1d" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/326e2324-5a8f-4f3c-b371-84de38015e1d/console_1.sql" value="326e2324-5a8f-4f3c-b371-84de38015e1d" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/326e2324-5a8f-4f3c-b371-84de38015e1d/console_2.sql" value="326e2324-5a8f-4f3c-b371-84de38015e1d" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/326e2324-5a8f-4f3c-b371-84de38015e1d/onboarding.sql" value="326e2324-5a8f-4f3c-b371-84de38015e1d" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/8d6f1371-685e-458e-8024-9903f4c35706/console.sql" value="8d6f1371-685e-458e-8024-9903f4c35706" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/auth.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/console.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/core.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/ems.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/integration.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/fd580bbb-b018-4251-befc-3a94d5be626e/onboarding-service.sql" value="fd580bbb-b018-4251-befc-3a94d5be626e" />
+  </component>
+</project>
