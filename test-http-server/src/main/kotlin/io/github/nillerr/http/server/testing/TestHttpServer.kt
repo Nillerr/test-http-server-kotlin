@@ -1,12 +1,15 @@
 package io.github.nillerr.http.server.testing
 
 import io.github.nillerr.http.server.testing.internal.toRecordedRequest
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.response.header
+import io.ktor.server.response.respond
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import java.net.ServerSocket
 import java.net.URI
 
@@ -15,21 +18,30 @@ class TestHttpServer(
     private val expectationMode: ExpectationMode = SerialExpectationMode(),
     private val verificationMode: VerificationMode = VerificationMode.VERIFY_ON_CLOSE,
 ) : AutoCloseable {
-    private var server: EmbeddedServer<*, *>? = null
-    private var serverHost: String? = null
-    private var serverPort: Int? = null
+    data class ServerWrapper(private val server: EmbeddedServer<*, *>, val host: String, val port: Int) {
+        fun start() {
+            server.start(wait = false)
+        }
+
+        fun stop() {
+            server.stop()
+        }
+    }
+
+    private var server: ServerWrapper? = null
 
     private val expectations = mutableListOf<RequestExpectation>()
 
     val url: URI
         get() {
-            init()
-            val host = serverHost ?: "localhost"
-            val port = serverPort ?: 0
+            val server = init()
+
+            val host = server.host
+            val port = server.port
             return URI("http://$host:$port")
         }
 
-    private fun init(): EmbeddedServer<*, *> {
+    private fun init(): ServerWrapper {
         return server ?: startInternal()
     }
 
@@ -46,7 +58,7 @@ class TestHttpServer(
         expectations.clear()
     }
 
-    private fun startInternal(): EmbeddedServer<*, *> {
+    private fun startInternal(): ServerWrapper {
         val host = "localhost"
         val port = ServerSocket(0).use { it.localPort }
 
@@ -60,13 +72,11 @@ class TestHttpServer(
             }
         }
 
-        server.start()
+        val wrapper = ServerWrapper(server, host, port)
+        wrapper.start()
 
-        this.server = server
-        this.serverHost = host
-        this.serverPort = port
-
-        return server
+        this.server = wrapper
+        return wrapper
     }
 
     private suspend fun handleCall(call: ApplicationCall) {
