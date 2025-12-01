@@ -6,8 +6,8 @@ Provides an HTTP server for testing HTTP client implementations.
 
 ```kotlin
 dependencies {
-    implementation("io.github.nillerr:test-http-server:1.0.1")
-    implementation("io.github.nillerr:test-http-server-jackson:1.0.1")
+    implementation("io.github.nillerr:test-http-server:1.0.3")
+    implementation("io.github.nillerr:test-http-server-jackson:1.0.3")
 }
 ```
 
