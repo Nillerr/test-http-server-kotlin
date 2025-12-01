@@ -15,23 +15,21 @@ class TestHttpServer(
     private val expectationMode: ExpectationMode = SerialExpectationMode(),
     private val verificationMode: VerificationMode = VerificationMode.VERIFY_ON_CLOSE,
 ) : AutoCloseable {
-    private var server: ApplicationEngine? = null
+    private var server: EmbeddedServer<*, *>? = null
+    private var serverHost: String? = null
+    private var serverPort: Int? = null
 
     private val expectations = mutableListOf<RequestExpectation>()
 
-    private val connectors: List<EngineConnectorConfig>
-        get() = init().environment.connectors
-
     val url: URI
         get() {
-            val connector = connectors.single()
-            val scheme = connector.type.name.lowercase()
-            val host = connector.host
-            val port = connector.port
-            return URI("$scheme://$host:$port")
+            init()
+            val host = serverHost ?: "localhost"
+            val port = serverPort ?: 0
+            return URI("http://$host:$port")
         }
 
-    private fun init(): ApplicationEngine {
+    private fun init(): EmbeddedServer<*, *> {
         return server ?: startInternal()
     }
 
@@ -48,7 +46,7 @@ class TestHttpServer(
         expectations.clear()
     }
 
-    private fun startInternal(): ApplicationEngine {
+    private fun startInternal(): EmbeddedServer<*, *> {
         val host = "localhost"
         val port = ServerSocket(0).use { it.localPort }
 
@@ -65,6 +63,8 @@ class TestHttpServer(
         server.start()
 
         this.server = server
+        this.serverHost = host
+        this.serverPort = port
 
         return server
     }

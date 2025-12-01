@@ -13,7 +13,7 @@ internal suspend fun ApplicationRequest.toRecordedRequest(): RecordedRequest {
         path = path(),
         parameters = queryParameters.toStringValues(),
         headers = headers.toStringValues(),
-        body = receiveChannel().readRemaining().readBytes(),
+        body = call.receive<ByteArray>(),
     )
 }
 
